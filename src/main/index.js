@@ -1,6 +1,7 @@
 import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { ipcMain, net } from 'electron'
 import icon from '../../resources/icon.png?asset'
 
 function createWindow() {
@@ -69,3 +70,10 @@ app.on('window-all-closed', () => {
 
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
+
+ipcMain.handle("doSomething", async (event, url) => {
+  const response = await net.fetch(url)
+  if(response.ok) {
+    return await response.json()
+  }
+})
